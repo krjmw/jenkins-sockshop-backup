@@ -5,6 +5,7 @@ pipeline {
     }
     environment {
         PATH = "/host-bin:${env.PATH}"
+        MYSQL_PASSWORD = credentials('mysql-root-password')
     }
     stages {
         stage('Backup MySQL') {
