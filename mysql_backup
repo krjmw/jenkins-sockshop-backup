@@ -1,5 +1,5 @@
 pipeline {
-    agent any
+    agent none
     triggers {
         cron('0 2 * * *')  // 每天凌晨2点触发
     }
