@@ -1,0 +1,36 @@
+pipeline {
+    agent any
+    triggers {
+        cron('0 2 * * *')  // 每天凌晨2点触发
+    }
+    environment {
+        KUBECONFIG = credentials('kubeconfig')  // 你的 k3s 配置
+    }
+    stages {
+        stage('Backup MySQL') {
+            steps {
+                script {
+                    sh '''
+                        kubectl exec -n sock-shop catalogue-db-$(kubectl get pods -n sock-shop -l name=catalogue-db -o jsonpath='{.items[0].metadata.name}') -- \
+                        mysqldump -uroot -p$MYSQL_PASSWORD --all-databases > catalogue-db-backup.sql
+                    '''
+                }
+            }
+        }
+        stage('Backup MongoDB') {
+            steps {
+                script {
+                    sh '''
+                        kubectl exec -n sock-shop carts-db-$(kubectl get pods -n sock-shop -l name=carts-db -o jsonpath='{.items[0].metadata.name}') -- \
+                        mongodump --archive > carts-db-backup.archive
+                    '''
+                }
+            }
+        }
+        stage('Archive Backups') {
+            steps {
+                archiveArtifacts artifacts: '*.sql,*.archive'
+            }
+        }
+    }
+}
