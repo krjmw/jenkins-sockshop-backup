@@ -8,6 +8,11 @@ pipeline {
     }
     stages {
         stage('Backup MySQL') {
+                agent {
+                    node {
+                        label 'built-in'   // 这是 Jenkins 内置 Master 节点的标签
+                    }
+                }
             steps {
                 script {
                     sh '''
