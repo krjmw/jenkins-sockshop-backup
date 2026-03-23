@@ -4,7 +4,7 @@ pipeline {
         cron('0 2 * * *')  // 每天凌晨2点触发
     }
     environment {
-        KUBECONFIG_CONTENT = credentials('kubeconfig-text')  // 你的 k3s 配置
+        KUBECONFIG_CONTENT = credentials('kubeconfig')  // 你的 k3s 配置
     }
     stages {
         stage('Setup Kubeconfig') {
