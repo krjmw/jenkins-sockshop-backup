@@ -17,9 +17,9 @@ pipeline {
             steps {
                 script {
                     sh '''
-                        podname=$(kubectl get pods -n sock-shop -l name=catalogue-db -o jsonpath='{.items[0].metadata.name}')
+                        podname=$(/host-bin/k3s kubectl get pods -n sock-shop -l name=catalogue-db -o jsonpath='{.items[0].metadata.name}')
                         echo $podname
-                        kubectl exec -n sock-shop $podname -- \
+                        /host-bin/k3s kubectl exec -n sock-shop $podname -- \
                         mysqldump -uroot -p$MYSQL_PASSWORD_PSW --all-databases > /tmp/catalogue-db-backup.sql
                     '''
                 }
@@ -29,7 +29,7 @@ pipeline {
             steps {
                 script {
                     sh '''
-                        kubectl exec -n sock-shop carts-db-$(kubectl get pods -n sock-shop -l name=carts-db -o jsonpath='{.items[0].metadata.name}') -- \
+                        /host-bin/k3s kubectl exec -n sock-shop $(/host-bin/k3s kubectl get pods -n sock-shop -l name=carts-db -o jsonpath='{.items[0].metadata.name}') -- \
                         mongodump --archive > carts-db-backup.archive
                     '''
                 }
