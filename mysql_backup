@@ -1,5 +1,9 @@
 pipeline {
-    agent none
+   agent {
+        node {
+            label 'built-in'
+        }
+    }
     triggers {
         cron('0 2 * * *')  // 每天凌晨2点触发
     }
@@ -9,11 +13,6 @@ pipeline {
     }
     stages {
         stage('Backup MySQL') {
-                agent {
-                    node {
-                        label 'built-in'   // 这是 Jenkins 内置 Master 节点的标签
-                    }
-                }
             steps {
                 script {
                     sh '''
