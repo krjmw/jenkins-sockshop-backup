@@ -18,7 +18,7 @@ pipeline {
                 script {
                     sh '''
                         kubectl exec -n sock-shop catalogue-db-$(kubectl get pods -n sock-shop -l name=catalogue-db -o jsonpath='{.items[0].metadata.name}') -- \
-                        mysqldump -uroot -p$MYSQL_PASSWORD --all-databases > catalogue-db-backup.sql
+                        mysqldump -uroot -p$MYSQL_PASSWORD_PSW --all-databases > catalogue-db-backup.sql
                     '''
                 }
             }
