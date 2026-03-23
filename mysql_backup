@@ -7,18 +7,6 @@ pipeline {
         PATH = "/host-bin:${env.PATH}"
     }
     stages {
-        stage('Setup Kubeconfig') {
-            steps {
-                script {
-                    sh '''
-                        mkdir -p $HOME/.kube
-                        echo "$KUBECONFIG_CONTENT" > $HOME/.kube/config
-                        export KUBECONFIG=$HOME/.kube/config
-                        echo "$KUBECONFIG_CONTENT"
-                    '''
-                }
-            }
-        }
         stage('Backup MySQL') {
             steps {
                 script {
